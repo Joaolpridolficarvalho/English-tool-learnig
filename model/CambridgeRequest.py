@@ -19,15 +19,12 @@ class CambridgeRequest():
             results.append(content_tag.text)
         return results
 
-    def save_page(self, page):
-        with open(os.path.join('.', 'test_page.html'), 'wb') as f:
-            f.write(page.content)
+    
 
 if __name__ == '__main__':
     word = 'hello'
     cambridge = CambridgeRequest(word)
     page = cambridge.access_url()
-    cambridge.save_page(page)
     category = cambridge.get_content_tag(page, 'span', 'pos dpos')
     print('Category:' + str(category))
     exemples = cambridge.get_content_tag(page, 'span', 'trans dtrans dtrans-se')
