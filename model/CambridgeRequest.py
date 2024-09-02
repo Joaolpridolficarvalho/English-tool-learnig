@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+from Controller.Instalation import Installation
 import os
 
 
@@ -49,22 +50,16 @@ class CambridgeRequest():
         link = self.get_link_pronunciation()
         BASE_URL = 'http://dictionary.cambridge.org'
         if link:
-            # Get the current working directory
-            current_path = os.getcwd()
-            # Create a directory for saving audio files if it doesn't exist
-            audio_dir = os.path.join(current_path, 'audio_files')
-            if not os.path.exists(audio_dir):
-                os.makedirs(audio_dir)
             for i, audio_link in enumerate(link):
                 link_pronunciation = BASE_URL + audio_link
                 response = requests.get(link_pronunciation, headers={'User-Agent': 'Mozilla/5.0'})
-                audio_path = os.path.join(audio_dir, f'pronunciation_{self.word}_{i}.mp3')
+                audio_path = os.path.join(Installation().get_path_audio_files(), f'pronunciation_{self.word}_{i}.mp3')
                 with open(audio_path, 'wb') as file:
                     file.write(response.content)
 
-# TODO: Separate the responsibilities of the class
+
 if __name__ == '__main__':
-    word = 'hello'
+    word = 'speak'
     cambridge = CambridgeRequest(word)
     print(cambridge.get_exemples())
     print(cambridge.get_category())
