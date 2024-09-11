@@ -1,0 +1,53 @@
+[
+    {
+        "word": "dog",
+        "category": [
+            "['noun'",
+            " 'verb'",
+            " 'noun']"
+        ],
+        "exemples": "['\\ncachorro,  c\u00e3o', '\\nperseguir', '\\ncachorro/-rra [ masculine-feminine ]', '\\nc\u00e3o [ masculine ]']",
+        "audio_path": [
+            ".\\audio_files\\pronunciation_dog_0.mp3",
+            ".\\audio_files\\pronunciation_dog_1.mp3",
+            ".\\audio_files\\pronunciation_dog_2.mp3",
+            ".\\audio_files\\pronunciation_dog_3.mp3",
+            ".\\audio_files\\pronunciation_dog_4.mp3",
+            ".\\audio_files\\pronunciation_dog_5.mp3"
+        ]
+    },
+    {
+        "word": "dog",
+        "category": [
+            "['noun'",
+            " 'verb'",
+            " 'noun']"
+        ],
+        "exemples": "['\\ncachorro,  c\u00e3o', '\\nperseguir', '\\ncachorro/-rra [ masculine-feminine ]', '\\nc\u00e3o [ masculine ]']",
+        "audio_path": [
+            ".\\audio_files\\pronunciation_dog_0.mp3",
+            ".\\audio_files\\pronunciation_dog_1.mp3",
+            ".\\audio_files\\pronunciation_dog_2.mp3",
+            ".\\audio_files\\pronunciation_dog_3.mp3",
+            ".\\audio_files\\pronunciation_dog_4.mp3",
+            ".\\audio_files\\pronunciation_dog_5.mp3"
+        ]
+    },
+    {
+        "word": "dog",
+        "category": [
+            "['noun'",
+            " 'verb'",
+            " 'noun']"
+        ],
+        "exemples": "['I grabbed the dog by the collar and dragged it out of the room.', 'A dog lay under the table, gnawing on a bone.', \"Steve's gone out to walk the dogs.\", 'The security guards set their dogs on the intruders.', 'Please keep your dog on a lead when on the beach.']",
+        "audio_path": [
+            ".\\audio_files\\pronunciation_dog_0.mp3",
+            ".\\audio_files\\pronunciation_dog_1.mp3",
+            ".\\audio_files\\pronunciation_dog_2.mp3",
+            ".\\audio_files\\pronunciation_dog_3.mp3",
+            ".\\audio_files\\pronunciation_dog_4.mp3",
+            ".\\audio_files\\pronunciation_dog_5.mp3"
+        ]
+    }
+]

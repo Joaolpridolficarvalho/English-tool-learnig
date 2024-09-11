@@ -1,14 +1,15 @@
 import requests
 from bs4 import BeautifulSoup
-from Controller.Instalation import Installation
+import SaveJSON
 import os
-
+from Controller.Instalation import Installation
 
 class CambridgeRequest():
 
     def __init__(self, word):
         self.word = word
         self.URL = ('https://dictionary.cambridge.org/pt/dicionario/ingles-portugues/{}'.format(self.word))
+        self.save_json = SaveJSON.SaveJSON()
 
     def access_url(self):
         response = requests.get(self.URL, headers={'User-Agent': 'Mozilla/5.0'})
@@ -34,8 +35,8 @@ class CambridgeRequest():
         return result
 
     def get_exemples(self):
-        tag = 'span'
-        class_name = 'trans dtrans dtrans-se'
+        tag = 'li'
+        class_name = 'eg dexamp hax'
         result = self.get_content_tag(tag, class_name)
         result = str(result).replace('\n', ' ')
         return result
@@ -46,22 +47,54 @@ class CambridgeRequest():
         result = self.get_content_tag(tag, class_name, 'src')
         return result
 
+    def save_pronunciation(self):
+        response = self.download_pronunciation()
+        audio_path_list = list()
+        Installation().create_audio_files_directory()
+        for i, audio_link in enumerate(response):
+            audio_path = os.path.join(Installation().get_path_audio_files(), f'pronunciation_{self.word}_{i}.mp3')
+            with open(audio_path, 'wb') as file:
+                file.write(response[i].content)
+            audio_path_list.append(audio_path)
+        return audio_path_list
+
     def download_pronunciation(self):
         link = self.get_link_pronunciation()
         BASE_URL = 'http://dictionary.cambridge.org'
+        response_list = list()
         if link:
             for i, audio_link in enumerate(link):
                 link_pronunciation = BASE_URL + audio_link
                 response = requests.get(link_pronunciation, headers={'User-Agent': 'Mozilla/5.0'})
-                audio_path = os.path.join(Installation().get_path_audio_files(), f'pronunciation_{self.word}_{i}.mp3')
-                with open(audio_path, 'wb') as file:
-                    file.write(response.content)
+                response_list.append(response)
+
+            return response_list
+
+    def serialize_json(self, audio_path):
+        word = self.word
+        category = self.get_category()
+        examples = self.get_exemples()
+        self.save_json.serialize_json(word, category, examples, audio_path)
+
+    def save_page(self, path):
+        page = self.access_url()
+        with open(path, 'w') as file:
+            file.write(page.text)
 
 
 if __name__ == '__main__':
-    word = 'speak'
+    word = 'dog'
     cambridge = CambridgeRequest(word)
     print(cambridge.get_exemples())
     print(cambridge.get_category())
     print(cambridge.get_link_pronunciation())
-    cambridge.download_pronunciation()
+    cambridge.save_pronunciation()
+    cambridge.save_page('./page.html')
+
+
+
+
+
+
+
+
