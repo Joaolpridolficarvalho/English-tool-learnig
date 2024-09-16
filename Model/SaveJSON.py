@@ -1,6 +1,8 @@
 import json
 from Controller.Instalation import Installation
 import os
+import random
+
 class SaveJSON:
     def __init__(self):
         self.installation = Installation()
@@ -40,6 +42,11 @@ class SaveJSON:
                 return data
         except (FileNotFoundError, json.JSONDecodeError) as e:
             print('Error: ', e)
+
+    def shuffle_json(self, path):
+        data = self.read_json(path)
+        return random.shuffle(data)
+
 if __name__ == '__main__':
     data = {'name':'José ', 'age':19, 'ability':['python', 'java']}
 

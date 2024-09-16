@@ -11,12 +11,12 @@ class CambridgeRequest():
         self.URL = ('https://dictionary.cambridge.org/pt/dicionario/ingles-portugues/{}'.format(self.word))
         self.save_json = SaveJSON.SaveJSON()
 
-    def access_url(self):
+    def __access_url(self):
         response = requests.get(self.URL, headers={'User-Agent': 'Mozilla/5.0'})
         return response
 
     def get_content_tag(self, tag, class_name, element='text'):
-        page = self.access_url()
+        page = self.__access_url()
         soup = BeautifulSoup(page.text, 'html.parser')
         results = list()
         for content_tag in soup.find_all(tag, class_=class_name):
@@ -34,7 +34,7 @@ class CambridgeRequest():
         result = str(result).split(',')
         return result
 
-    def get_exemples(self):
+    def get_examples(self):
         tag = 'li'
         class_name = 'eg dexamp hax'
         result = self.get_content_tag(tag, class_name)
@@ -70,10 +70,11 @@ class CambridgeRequest():
 
             return response_list
 
-    def serialize_json(self, audio_path):
+    def serialize_json(self):
         word = self.word
         category = self.get_category()
-        examples = self.get_exemples()
+        examples = self.get_examples()
+        audio_path = self.save_pronunciation()
         self.save_json.serialize_json(word, category, examples, audio_path)
 
     def save_page(self, path):
@@ -83,13 +84,13 @@ class CambridgeRequest():
 
 
 if __name__ == '__main__':
-    word = 'dog'
+    word = 'cat'
     cambridge = CambridgeRequest(word)
-    print(cambridge.get_exemples())
+    print(cambridge.get_examples())
     print(cambridge.get_category())
     print(cambridge.get_link_pronunciation())
     cambridge.save_pronunciation()
-    cambridge.save_page('./page.html')
+
 
 
 
