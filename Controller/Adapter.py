@@ -1,29 +1,15 @@
 import Model.CambridgeRequest as CambridgeRequest
-import Model.SaveJSON as SaveJSON
+from Model.SaveJSON import SaveJSON
 class Adapter:
-    def __init__(self, word):
-        self.cambridge = CambridgeRequest.CambridgeRequest(word)
-        self.save_json = SaveJSON.SaveJSON()
-    def get_examples(self):
-        return self.cambridge.get_examples()
+    def __init__(self):
+        self.cambridge = CambridgeRequest.CambridgeRequest()
+        self.save_json = SaveJSON()
+    def process_request(self, word):
+        self.cambridge.process_request(word)
 
-    def get_category(self):
-        return self.cambridge.get_category()
+    def return_list(self):
+        data = self.save_json.deserialize_json_word()
+        return [data] if isinstance(data, dict) else data
 
-    def get_link_pronunciation(self):
-        return self.cambridge.get_link_pronunciation()
-
-    def save_pronunciation(self):
-        return self.cambridge.save_pronunciation()
-
-    def serialize_json(self):
-        self.cambridge.serialize_json()
-
-    def save_page(self, path):
-        self.cambridge.save_page(path)
-
-    def get_word(self):
-        return self.cambridge.word
-
-    def get_audio_path(self):
-        return self.cambridge.save_pronunciation()
+    def shuffle_dict(self):
+        return self.save_json.shuffle_json()
