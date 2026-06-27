@@ -31,7 +31,7 @@ dependencies = [
     "idna==3.8",
     "requests==2.32.3",
     "soupsieve==2.6",
-    "urllib3==2.2.2",
+    "urllib3==2.7.0",
 ]
 
 [project.optional-dependencies]
