@@ -1,5 +1,6 @@
 import Model.CambridgeRequest as CambridgeRequest
 from Model.SaveJSON import SaveJSON
+import asyncio
 
 
 class Adapter:
@@ -8,7 +9,7 @@ class Adapter:
         self.save_json = SaveJSON()
 
     def process_request(self, word):
-        self.cambridge.process_request(word)
+        asyncio.run(self.cambridge.process_request(word))
 
     def return_list(self):
         data = self.save_json.deserialize_json_word()
