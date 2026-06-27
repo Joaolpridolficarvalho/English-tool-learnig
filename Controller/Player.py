@@ -1,5 +1,5 @@
 import pygame
-import os
+
 
 class Player:
     def __init__(self):
@@ -21,6 +21,9 @@ class Player:
         except pygame.error as e:
             raise Exception(f"Error playing audio: {e}")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     player = Player()
-    player.play(r'D:\Documentos\English\English-tool-learnig\model\audio_files\pronunciation_hello_0.mp3')
+    player.play(
+        r"D:\Documentos\English\English-tool-learnig\model\audio_files\pronunciation_hello_0.mp3"
+    )

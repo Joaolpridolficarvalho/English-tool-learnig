@@ -1,9 +1,12 @@
 import Model.CambridgeRequest as CambridgeRequest
 from Model.SaveJSON import SaveJSON
+
+
 class Adapter:
     def __init__(self):
         self.cambridge = CambridgeRequest.CambridgeRequest()
         self.save_json = SaveJSON()
+
     def process_request(self, word):
         self.cambridge.process_request(word)
 

@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=75.0.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "english-tool-learning"
+version = "0.1.0"
+description = "A tool to help you learn English"
+readme = "README.md"
+authors = [
+    { name = "João Lucas", email = "jlprcarvalho@gmail.com" }
+]
+license = { file = "LICENSE" }
+
+keywords = ["english", "learning", "tool"]
+
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent"
+]
+
+dependencies = [
+    "beautifulsoup4==4.12.3",
+    "certifi==2024.7.4",
+    "charset-normalizer==3.3.2",
+    "idna==3.8",
+
+    "requests==2.32.3",
+    "soupsieve==2.6",
+    "urllib3==2.2.2"
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff==0.15.19"
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.setuptools]
+packages = ["Controller", "Interface", "Model"]

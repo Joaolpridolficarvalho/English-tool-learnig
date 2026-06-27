@@ -1,9 +1,10 @@
 import os
 
+
 class Installation:
     def __init__(self):
         self.__path = os.curdir
-        self.__path_audio_files = os.path.join(self.get_path(), 'audio_files')
+        self.__path_audio_files = os.path.join(self.get_path(), "audio_files")
 
     def create_directory(self):
         os.makedirs(self.get_path(), exist_ok=True)
@@ -18,7 +19,7 @@ class Installation:
         return self.__path
 
     def __set_path_audio_files(self):
-        self.__path_audio_files = os.path.join(self.get_path(), 'audio_files')
+        self.__path_audio_files = os.path.join(self.get_path(), "audio_files")
 
     def get_path_audio_files(self):
         return self.__path_audio_files

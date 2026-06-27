@@ -3,49 +3,62 @@ from Controller.Instalation import Installation
 import os
 import random
 
-class SaveJSON:
 
+class SaveJSON:
     def __init__(self):
         self.installation = Installation()
         self.path = self.installation.get_path()
 
-    def __update_json(self, data, path):
-        self.__ensure_json_exists(path)
- #       data_existing = self.__read_json(path)
-#        data_existing.update(data)
-        self.__write_json(data, path)
+    def __read_json(self, file_path):
+        if not os.path.exists(file_path):
+            return []
+        with open(file_path, "r", encoding="utf-8") as file:
+            try:
+                data = json.load(file)
+            except json.JSONDecodeError:
+                return []
+        return data if isinstance(data, list) else [data]
 
-    def serialize_json_word(self, word, category, examples, audio_path):
-        data = {'word': word, 'category': category, 'examples': examples, 'audio_path': [i for i in audio_path]}
-        self.save_json_word(data)
+    def __write_json(self, file_path, data):
+        # Read existing data if file exists
+        existing_data = self.__read_json(file_path) if os.path.exists(file_path) else []
 
-    def save_json_config(self, data):
-        path = os.path.join(self.path, 'config.json')
-        self.__write_json(data, path)
+        # Ensure existing data is a list
+        if not isinstance(existing_data, list):
+            existing_data = [existing_data]
+
+        # Append new data
+        if isinstance(data, list):
+            existing_data.extend(data)
+        else:
+            existing_data.append(data)
+
+        # Write complete JSON array
+        with open(file_path, "w", encoding="utf-8") as file:
+            json.dump(existing_data, file, indent=4)
 
     def save_json_word(self, data):
-        path = os.path.join(self.path, 'words.json')
-        self.__update_json(data, path)
+        file_path = os.path.join(self.path, "words.json")
+        self.__write_json(file_path, data)
 
-    def __write_json(self, data, path):
-        self.__ensure_json_exists(path)
-        with open(path, 'w') as file:
-            json.dump(data, file, indent=4)
+    def save_json_config(self, data):
+        file_path = os.path.join(self.path, "config.json")
+        self.__write_json(file_path, data)
 
-    def __read_json(self, path):
-        self.__ensure_json_exists(path)
-        with open(path, 'r') as file:
-            return json.load(file)
-
-    def __ensure_json_exists(self, path):
-        if not os.path.exists(path):
-            with open(path, 'w') as file:
-                json.dump({}, file, indent=4)
+    def serialize_json_word(self, word, category, examples, audio_path):
+        data = {
+            "word": word,
+            "category": category,
+            "examples": examples,
+            "audio_path": [i for i in audio_path],
+        }
+        data_list = [data]
+        self.save_json_word(data_list)
 
     def shuffle_json(self):
-        data = self.__read_json(os.path.join(self.path, 'words.json'))
+        data = self.__read_json(os.path.join(self.path, "words.json"))
         random.shuffle(data)
         return data
 
     def deserialize_json_word(self):
-        return self.__read_json(os.path.join(self.path, 'words.json'))
+        return self.__read_json(os.path.join(self.path, "words.json"))

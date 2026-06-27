@@ -1,4 +1,9 @@
-venv
+.venv
 *.html
 *xml
 audio_files
+.idea
+english_tool_learning.egg-info
+*/__pycache__
+uv.lock
+*.json
