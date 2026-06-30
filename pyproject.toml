@@ -6,6 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "english-tool-learning"
 version = "0.1.0"
 description = "A tool to help you learn English"
+requires-python = "==3.14.4"
 readme = "README.md"
 authors = [
     { name = "João Lucas", email = "jlprcarvalho@gmail.com" }
@@ -29,9 +30,8 @@ dependencies = [
     "certifi==2024.7.4",
     "charset-normalizer==3.3.2",
     "idna==3.8",
-    "requests==2.32.3",
+    "pygame>=2.6.1",
     "soupsieve==2.6",
-    "urllib3==2.2.2",
 ]
 
 [project.optional-dependencies]

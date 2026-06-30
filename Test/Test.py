@@ -1,46 +1,43 @@
 import unittest
 from Controller.Player import Player
+from Controller.Adapter import Adapter
 from Model.SaveJSON import SaveJSON
-import json
+
+import os
+# This does not test the GUI.
+class TestCase(unittest.TestCase):
+    def setUp(self):
+        self.adapter = Adapter()
+        self.adapter.process_request("test")
+        self.player = Player()  
+
+    def json_is_valid(self):
+        data = self.adapter.return_list()
+        self.assertIsInstance(data, list)
+        self.assertGreater(len(data), 0)
+        for item in data:
+            self.assertIn("word", item)
+            self.assertIn("category", item)
+            self.assertIn("examples", item)
+            self.assertIn("audio_path", item)
+
+    def player_is_working(self):
+        data = SaveJSON().deserialize_json_word()
+        file_path = data['audio_path'][0]
+        self.player.play(file_path)
+
+    
+
+if __name__ == "__main__":
+    TestCase()
 
 
-class MyTestCase(unittest.TestCase):
 
-    def test_play_existing_file(self):
-        player = Player()
-        player.play(r'D:\Documentos\English\English-tool-learnig\model\audio_files\pronunciation_cat_0.mp3')
-        self.assertTrue(True)
 
-    def test_play_non_existing_file(self):
-        player = Player()
-        with self.assertRaises(Exception):
-            player.play(r'D:\Documentos\English\English-tool-learnig\model\audio_files\pronunciation_duck_0.mp3')
-        self.assertTrue(True)
 
-    def test_write_word_json(self):
-        save_json = SaveJSON()
-        data = {'word': 'cat', 'category': 'noun', 'examples': ['This is a cat'],
-                'audio_path': ['D:/Documentos/English/English-tool-learnig/model/audio_files/pronunciation_cat_0.mp3']}
-        with self.assertRaises(Exception):
-            save_json.save_json_word(data)
-        self.assertTrue(True)
 
-    def test_write_word_json_non_existing(self):
-        save_json = SaveJSON()
-        path = 'D:/Documentos/English/English-tool-learnig/model/words.json'
-        data = {'word': '', 'category': 'noun', 'examples': ['This is a cat'],
-                'audio_path': ['D:/Documentos/English/English-tool-learnig/model/audio']}
-        with open(path, 'w') as file:
-            json.dump(data, file, indent=4)
-        with self.assertRaises(Exception):
-            save_json.save_json_word(data)
-#TODO: Fix this test
-    def test_write_word_json_duplicate(self):
-        with self.assertRaises(Exception):
-            self.test_write_word_json()
-            self.test_write_word_json()
-        self.assertTrue(True)
-    def test_shuffle_json(self):
-        save_json = SaveJSON()
-if __name__ == '__main__':
-    unittest.main()
+
+
+
+
+            

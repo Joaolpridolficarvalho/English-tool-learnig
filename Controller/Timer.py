@@ -1,19 +1,15 @@
 import time
 
 
-class Timer:
-    def __init__(self):
-        self.interval_seconds = 0
+def timer(func, interval):
+    """
+    A decorator that runs a function at a specified interval.
 
-    def set_interval(self, interval):
-        self.interval_seconds = interval
-
-    def start(self):
-        time.sleep(self.interval_seconds)
-        print("Time is up!")
-
-
-if __name__ == "__main__":
-    timer = Timer()
-    timer.set_interval(10)
-    timer.start()
+    :param func: The function to be executed.
+    :param interval: The time interval (in seconds) between executions.
+    """
+    def wrapper(*args, **kwargs):
+        while True:
+            func(*args, **kwargs)
+            time.sleep(interval)
+    return wrapper

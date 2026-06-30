@@ -1,10 +1,15 @@
 import aiohttp
-import asyncio
 from bs4 import BeautifulSoup
 from Model.SaveJSON import SaveJSON
 import os
 from Controller.Instalation import Installation
+from dataclasses import dataclass
 
+@dataclass
+class Element:
+    tag: str
+    class_name: str
+    element: str = "text"
 
 class CambridgeRequest:
     def __init__(self):
@@ -16,66 +21,46 @@ class CambridgeRequest:
                 return await response.text()
         return response
 
-    async def get_content_tag(self, tag, class_name, url, element="text"):
-        page = await self.__access_url(url)
+    def content_tag(self, element: Element, page):
         soup = BeautifulSoup(page, "html.parser")
         results = list()
-        for content_tag in soup.find_all(tag, class_=class_name):
-            if element == "text":
+        for content_tag in soup.find_all(element.tag, class_=element.class_name):
+            if element.element == "text":
                 results.append(content_tag.get_text())
-            elif element == "src":
+            elif element.element == "src":
                 source_tag = content_tag.find("source")
-                results.append(source_tag.get("src"))
+                if source_tag is not None:
+                    source = source_tag.get("src")
+                    if source:
+                        results.append(source)
         return results
 
-    async def get_category(self, url):
-        tag = "span"
-        class_name = "pos dpos"
-        result = await self.get_content_tag(tag, class_name, url)
-        result = str(result).split(",")
-        return result
-
-    async def get_examples(self, url):
-        tag = "li"
-        class_name = "eg dexamp hax"
-        result = await self.get_content_tag(tag, class_name, url)
-        result = str(result).replace("\n", " ")
-        return result
-
-    async def get_link_pronunciation(self, url):
-        tag = "audio"
-        class_name = "hdn"
-        result = await self.get_content_tag(tag, class_name, url, "src")
-        return result
-
     async def save_pronunciation(self, url, word):
-        response = await self.download_pronunciation(url)
+        page = await self.__access_url(url)
+        audio_element = Element(tag="audio", class_name="hdn", element="src")
+        audio_links = self.content_tag(audio_element, page)
         audio_path = list()
-        if response:
+        if audio_links:
             installation = Installation()
             path = installation.get_path()
             audio_dir = os.path.join(path, "audio")
             os.makedirs(audio_dir, exist_ok=True)
 
-            for i, audio_data in enumerate(response):
+            for i, audio_link in enumerate(audio_links):
+                audio_data = await self.download_pronunciation(audio_link, url)
                 audio_file_path = os.path.join(audio_dir, f"{word}_{i}.mp3")
                 with open(audio_file_path, "wb") as audio_file:
                     audio_file.write(audio_data)
                 audio_path.append(audio_file_path)
         return audio_path
-    async def download_pronunciation(self, url):
-        link = await self.get_link_pronunciation(url)
-        response_list = list()
-        if link:
-            for i, audio_link in enumerate(link):
-                link_pronunciation = url + audio_link
-                async with aiohttp.ClientSession() as session:
-                    async with session.get(
-                        link_pronunciation, headers={"User-Agent": "Mozilla/5.0"}
-                    ) as response:
-                        response_list.append(await response.read())
 
-            return response_list
+    async def download_pronunciation(self, audio_link, url):
+        link_pronunciation = url + audio_link
+        async with aiohttp.ClientSession() as session:
+            async with session.get(
+                link_pronunciation, headers={"User-Agent": "Mozilla/5.0"}
+            ) as response:
+                return await response.read()
 
     async def process_request(self, word):
         URL = (
@@ -83,14 +68,12 @@ class CambridgeRequest:
                 word
             )
         )
-        category = await self.get_category(URL)
-        examples = await self.get_examples(URL)
+        page = await self.__access_url(URL)
+        category_element = Element(tag="span", class_name="pos dpos")
+        category = self.content_tag(category_element, page)
+        examples_element = Element(tag="li", class_name="eg dexamp hax")
+        examples = self.content_tag(examples_element, page)
         audio_path = await self.save_pronunciation(URL, word)
         self.save_json.serialize_json_word(word, category, examples, audio_path)
-        await self.save_page(URL)
 
-    # Test
-    async def save_page(self, URL):
-        page = await self.__access_url(URL)
-        with open("page.html", "w", encoding="utf-8") as file:
-            file.write(page)
+    

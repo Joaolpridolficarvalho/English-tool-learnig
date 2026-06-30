@@ -62,3 +62,4 @@ class SaveJSON:
 
     def deserialize_json_word(self):
         return self.__read_json(os.path.join(self.path, "words.json"))
+

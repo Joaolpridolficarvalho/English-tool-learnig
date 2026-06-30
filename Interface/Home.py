@@ -48,6 +48,7 @@ class Home:
                 fg=self.label_fill_color,
                 font=(self.font_name, self.font_size),
             ).pack()
+            
 
     def get_response(self):
         return self.response_entry.get()
