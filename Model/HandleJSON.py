@@ -3,8 +3,7 @@ from Controller.Instalation import Installation
 import os
 import random
 
-
-class SaveJSON:
+class HandleJSON:
     def __init__(self):
         self.installation = Installation()
         self.path = self.installation.get_path()
@@ -57,9 +56,27 @@ class SaveJSON:
 
     def shuffle_json(self):
         data = self.__read_json(os.path.join(self.path, "words.json"))
+        question_data = self.__read_json(os.path.join(self.path, "question.json"))
+
         random.shuffle(data)
-        return data
+        random.shuffle(question_data)
+
+        word = data[0] if data else {}
+        question = question_data[0] if question_data else {}
+        return word, question
 
     def deserialize_json_word(self):
         return self.__read_json(os.path.join(self.path, "words.json"))
+    
+    def deserialize_json_config(self):
+        data = self.__read_json(os.path.join(self.path, "config.json"))
+        if isinstance(data, list):
+            return data[-1] if data else {}
+        return data
+    def deserialize_json_question(self):
+        data = self.__read_json(os.path.join(self.path, "question.json"))
+        if isinstance(data, list):
+            return data[-1] if data else {}
+        return data
+    
 

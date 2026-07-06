@@ -1,6 +1,6 @@
 import aiohttp
 from bs4 import BeautifulSoup
-from Model.SaveJSON import SaveJSON
+from Model.HandleJSON import HandleJSON
 import os
 from Controller.Instalation import Installation
 from dataclasses import dataclass
@@ -13,7 +13,7 @@ class Element:
 
 class CambridgeRequest:
     def __init__(self):
-        self.save_json = SaveJSON()
+        self.save_json = HandleJSON()
 
     async def __access_url(self, url):
         async with aiohttp.ClientSession() as session:

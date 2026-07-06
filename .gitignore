@@ -1,7 +1,7 @@
 .venv
 *.html
 *xml
-audio_files
+audio
 .idea
 english_tool_learning.egg-info
 */__pycache__

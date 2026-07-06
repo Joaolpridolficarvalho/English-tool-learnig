@@ -1,15 +1,21 @@
 import time
+from functools import wraps
+from Model.HandleJSON import HandleJSON
 
 
-def timer(func, interval):
-    """
-    A decorator that runs a function at a specified interval.
 
-    :param func: The function to be executed.
-    :param interval: The time interval (in seconds) between executions.
-    """
-    def wrapper(*args, **kwargs):
-        while True:
-            func(*args, **kwargs)
-            time.sleep(interval)
-    return wrapper
+def timer(func=None):
+    def decorator(fn):
+        @wraps(fn)
+        def wrapper(*args, **kwargs):
+            handle_json = HandleJSON()
+            interval = handle_json.deserialize_json_config().get("interval", 10)
+            while True:
+                fn(*args, **kwargs)
+                time.sleep(interval)
+
+        return wrapper
+
+    if callable(func):
+        return decorator(func)
+    return decorator
