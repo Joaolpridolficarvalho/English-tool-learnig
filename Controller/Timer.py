@@ -9,7 +9,7 @@ def timer(func=None):
         @wraps(fn)
         def wrapper(*args, **kwargs):
             handle_json = HandleJSON()
-            interval = handle_json.deserialize_json_config().get("interval", 10)
+            interval = handle_json.deserialize_json_config().get("interval", 15)
             while True:
                 fn(*args, **kwargs)
                 time.sleep(interval)

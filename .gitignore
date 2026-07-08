@@ -6,4 +6,4 @@ audio
 english_tool_learning.egg-info
 */__pycache__
 
-*.json
+words.json

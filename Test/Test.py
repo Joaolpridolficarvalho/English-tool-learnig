@@ -1,7 +1,7 @@
 import unittest
 from Controller.Player import Player
 from Controller.Adapter import Adapter
-from Model.ManipulateJSON import ManipulateJSON
+from Model.HandleJSON import HandleJSON
 
 import os
 # This does not test the GUI.
@@ -22,7 +22,7 @@ class TestCase(unittest.TestCase):
             self.assertIn("audio_path", item)
 
     def player_is_working(self):
-        data = ManipulateJSON().deserialize_json_word()
+        data = HandleJSON().deserialize_json_word()
         file_path = data['audio_path'][0]
         self.player.play(file_path)
 
