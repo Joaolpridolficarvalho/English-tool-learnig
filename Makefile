@@ -4,7 +4,7 @@ install:
 	uv sync --all-extras
 
 test:
-	uv run Test/Test.py
+	uv run python -m unittest discover -s Test -v
 
 lint:
 	uv run ruff check .
